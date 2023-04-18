@@ -4,4 +4,7 @@
     <string name="home_add">Crear</string>
     <string name="home_profile">Perfil</string>
     <string name="txt_welcome">Welcome...</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_eliminar">Eliminar</string>
 </resources>

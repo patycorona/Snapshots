@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager
 import com.example.snapshots.R
 import com.example.snapshots.databinding.ActivityMainBinding
 import com.example.snapshots.domain.model.ConstantGeneral
+import com.example.snapshots.ui.Home.HomeFragment
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.snackbar.Snackbar
@@ -54,6 +55,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpBottomNav(fragmentManager: FragmentManager){
+
+        val homeFragment = HomeFragment()
 
     }
 
