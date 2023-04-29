@@ -12,8 +12,6 @@ class FirebaseDatabaseCustom {
     private val LIKELIST = "likeList"
     val databaseRefence = FirebaseDatabase.getInstance().reference.child(SNAPSHOTS)
 
-
-
     fun setLike(snapshot: Snapshot, checked:Boolean) : Single<ResultModel>{
             databaseRefence.child(snapshot.id).child(LIKELIST)
                 .child(FirebaseAuth.getInstance().currentUser!!.uid).setValue(if (checked)  {true} else{null})

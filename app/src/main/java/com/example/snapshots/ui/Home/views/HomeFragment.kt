@@ -1,11 +1,10 @@
-package com.example.snapshots.ui.Home
+package com.example.snapshots.ui.Home.views
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.snapshots.R
 import com.example.snapshots.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
