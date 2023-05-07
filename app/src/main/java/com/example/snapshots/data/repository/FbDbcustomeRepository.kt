@@ -8,5 +8,4 @@ interface FbDbcustomeRepository {
 
     fun setLike(snapshot: Snapshot, checked:Boolean): Single<ResultModel>
 
-
 }
