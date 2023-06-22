@@ -1,0 +1,56 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+
+    ext.toolsVersion = '7.3.1'
+    ext.jetkotlinK = "1.6.10"
+    ext.googleServicesVersion = "4.3.13"
+    ext.daggerHilt = "2.40.5"
+
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:$toolsVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$jetkotlinK"
+        classpath "com.google.gms:google-services:$googleServicesVersion"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$daggerHilt"
+    }
+}
+
+ext {
+    //Support Libraries
+
+    coreVersion = '1.9.0'
+    appCompatVersion = '1.6.1'
+    materialVersion = '1.8.0'
+    constraintLayoutVersion = '2.1.4'
+
+    //Room
+    room = '2.5.1'
+    supportVersion = '1.0.0'
+
+    // image Handling
+    glideVersion = '4.11.0'
+
+    firebasedatabase = '8.0.2'
+    firebase = '31.4.0'
+
+    // testing
+    jUnit = '4.+'
+    jUnitExt = '1.1.5'
+    expresso = '3.5.1'
+
+    daggerHiltApp = "2.40.5"
+    daggerHiltViewModelApp = "1.0.0-alpha03"
+    drawerlayout = "1.1.1"
+    fragmentktx = "1.5.3"
+
+    googlegms = '17.0.0'
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

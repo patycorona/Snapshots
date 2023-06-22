@@ -1,0 +1,86 @@
+
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-parcelize'
+    id 'com.google.gms.google-services'
+}
+
+android {
+    namespace 'com.example.snapshots'
+    compileSdk 33
+
+    buildFeatures {
+        viewBinding = true
+    }
+
+    defaultConfig {
+        applicationId "com.example.snapshots"
+        minSdk 23
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    //implementation 'org.jetbrains.kotlin:kotlin-ksp:1.4.0-rc-dev-experimental-20200828'
+    implementation "androidx.core:core-ktx:$coreVersion"
+    implementation "androidx.appcompat:appcompat:$appCompatVersion"
+    implementation "com.google.android.material:material:$materialVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+
+    //Room
+    implementation "androidx.room:room-runtime:$room"
+    implementation "androidx.legacy:legacy-support-v4:$supportVersion"
+
+    kapt "androidx.room:room-compiler:$room"
+
+    //Glide
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
+
+    // FirebaseUI for Firebase Realtime Database
+    implementation "com.firebaseui:firebase-ui-database:$firebasedatabase"
+
+    // FirebaseUI for Firebase Auth
+    implementation "com.firebaseui:firebase-ui-auth:$firebasedatabase"
+
+    //import the Bom for the firabase platform
+    implementation "com.google.firebase:firebase-bom:$firebase"
+
+    //Declare dependency for the cloud Storage Library
+    //when usin the BoM, you don´t specific versions in the firebase Library dependencies
+    implementation 'com.google.firebase:firebase-storage-ktx'
+
+    testImplementation "junit:junit:4.+"
+    androidTestImplementation "androidx.test.ext:junit:$jUnitExt"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
+
+    //dagger hilt
+    implementation "com.google.dagger:hilt-android:$daggerHilt"
+    implementation "androidx.drawerlayout:drawerlayout:$drawerlayout"
+    implementation "androidx.fragment:fragment-ktx:$fragmentktx"
+    kapt "com.google.dagger:hilt-compiler:$daggerHilt"
+
+}
