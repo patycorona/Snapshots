@@ -12,4 +12,6 @@
     <string name="hint_pwd">Password</string>
     <string name="txt_registrar">Registrar</string>
     <string name="txt_entrar">Entrar</string>
+    <string name="txt_user_register">Registro de Usuario</string>
+    <string name="hint_confirm_pwd">Confirmar password</string>
 </resources>
