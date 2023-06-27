@@ -9,7 +9,9 @@ import android.widget.Toast
 import com.example.snapshots.R
 import com.example.snapshots.databinding.FragmentUserRegisterBinding
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_COMPLETE_INFO
+import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_ERROR_AUTH
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_NOT_MATCH_PWD
+import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_SUCCESS
 import com.example.snapshots.domain.model.UserModel
 import com.example.snapshots.ui.MainActivity
 import com.example.snapshots.ui.component.Screen
@@ -51,12 +53,8 @@ class UserRegisterFragment : Fragment() {
     private fun validaCampos(user:String, pwd:String, confirmPwd:String){
         if (user.isNullOrEmpty().not() && pwd.isNullOrEmpty().not() &&
             confirmPwd.isNullOrEmpty().not()){
-            if (pwd == confirmPwd) {
 
-//                userModel?.email = user
-//                userModel?.pwd = pwd
-//                (activity as MainActivity)
-//                    .changeScreen(Screen.MainActivity,UserModel())
+            if (pwd == confirmPwd) {
                 registerUser(user,pwd)
             }else{
                 Toast.makeText(requireContext(), MSG_NOT_MATCH_PWD,
@@ -76,32 +74,25 @@ class UserRegisterFragment : Fragment() {
         FirebaseAuthViewModel().firebaseAuth(email, password)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Toast.makeText(requireContext(), "createUserWithEmail:success",
+                    Toast.makeText(requireContext(), MSG_SUCCESS,
                         Toast.LENGTH_SHORT).show()
                     val user = task.result.user
                     updateUI(user)
                 } else {
-                    // If sign in fails, display a message to the user.
-                    Toast.makeText(requireContext(), "Authentication failed.",
+                    Toast.makeText(requireContext(), MSG_ERROR_AUTH,
                         Toast.LENGTH_SHORT).show()
                     updateUI(null)
                 }
             }
     }
+
     fun updateUI(user: FirebaseUser?) {
         user?.let {
-            // Name, email address, and profile photo Url
             val name = it.displayName
             val email = it.email
             val photoUrl = it.photoUrl
 
-            // Check if user's email is verified
             val emailVerified = it.isEmailVerified
-
-            // The user's ID, unique to the Firebase project. Do NOT use this value to
-            // authenticate with your backend server, if you have one. Use
-            // FirebaseUser.getIdToken() instead.
             val uid = it.uid
         }
     }

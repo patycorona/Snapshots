@@ -7,6 +7,8 @@ class ConstantGeneral {
 /*        const val RC_GALLERY = 18
         const val RC_SIGN_IN = 21*/
 
+        const val MSG_ERROR_AUTH = "Authentication failed."
+        const val MSG_SUCCESS = "createUserWithEmail:success"
         const val MSG_COMPLETE_INFO ="To continue complete the required fields"
         const val MSG_NOT_MATCH_PWD = "password and confirm password does not match"
         const val PATH_SNAPSHOTS = "snapshots"
