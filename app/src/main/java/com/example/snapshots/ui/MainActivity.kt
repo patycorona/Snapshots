@@ -14,6 +14,7 @@ import com.example.snapshots.ui.Home.views.HomeFragment
 import com.example.snapshots.ui.component.Screen
 import com.example.snapshots.ui.login.views.LoginFragment
 import com.example.snapshots.ui.profile.views.ProfileFragment
+import com.example.snapshots.ui.user.views.UserRegisterFragment
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -41,9 +42,16 @@ class MainActivity : AppCompatActivity(){
 
     fun changeScreen(typeScreen: Screen) {
         when (typeScreen) {
+            Screen.MainActivity -> {
+                binding.bottomNav.visibility = View.INVISIBLE
+            }
             Screen.LoginFragment -> {
                 binding.bottomNav.visibility = View.INVISIBLE
                 openLoginFragment()
+            }
+            Screen.UserRegisterFragment -> {
+                binding.bottomNav.visibility = View.INVISIBLE
+                openUserRegisterFragment()
             }
         }
     }
@@ -52,6 +60,8 @@ class MainActivity : AppCompatActivity(){
         changeFragment(LoginFragment.newInstance())
     }
 
-
+    private fun openUserRegisterFragment() {
+        changeFragment(UserRegisterFragment.newInstance())
+    }
 
 }

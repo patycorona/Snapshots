@@ -19,7 +19,7 @@ class UseCaseModule {
     fun FirebaseDatabaseCustomUseCaseProvider(fbDbcustomeRepositoryImpl: FbDbcustomeRepositoryImpl) =
         FirebaseDatabaseCustomUseCase(fbDbcustomeRepositoryImpl)
 
-    @Provides
-    fun FbAuthUseCaseProvider(fbAuthRepositoryImpl: FbAuthRepositoryImpl) =
-        FbAuthUseCase(fbAuthRepositoryImpl)
+//    @Provides
+//    fun FbAuthUseCaseProvider(fbAuthRepositoryImpl: FbAuthRepositoryImpl) =
+//        FbAuthUseCase(fbAuthRepositoryImpl)
 }

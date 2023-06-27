@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.snapshots.databinding.FragmentLoginBinding
+import com.example.snapshots.ui.MainActivity
+import com.example.snapshots.ui.component.Screen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,13 +28,12 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         auth = FirebaseAuth.getInstance()
 
         binding = FragmentLoginBinding.inflate(LayoutInflater.from(context),null,false)
 
-
         initListener()
-
         return binding?.root
     }
 
@@ -41,33 +42,14 @@ class LoginFragment : Fragment() {
 
         binding?.apply {
 
-
-            var email = edUserName.text.toString()
-            var pwd = edPwd.text.toString()
-
-            btnEntrar.setOnClickListener { authUser(email,pwd) }
-        }
-    }
-
-    private fun registerUser(email : String, password: String) {
-
-//        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-/*
-        FirebaseAuthViewModel().firebaseAuth(email, password)
-        .addOnCompleteListener(this) { task ->
-            if (task.isSuccessful) {
-                // Sign in success, update UI with the signed-in user's information
-                Toast.makeText(baseContext, "createUserWithEmail:success",
-                    Toast.LENGTH_SHORT).show()
-                val user = task.result.user
-                updateUI(user)
-            } else {
-                // If sign in fails, display a message to the user.
-                Toast.makeText(baseContext, "Authentication failed.",
-                    Toast.LENGTH_SHORT).show()
-                updateUI(null)
+            btnRegistro.setOnClickListener {
+                (activity as MainActivity)
+                    .changeScreen(Screen.UserRegisterFragment)
             }
-        }*/
+
+            btnEntrar.setOnClickListener { authUser(edUserName.text.toString(),edPwd.text.toString()) }
+
+        }
     }
 
     fun authUser(email : String, password: String) {
