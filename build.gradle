@@ -48,6 +48,12 @@ ext {
     drawerlayout = "1.1.1"
     fragmentktx = "1.5.3"
 
+    //RxJava
+    rxjava2Version = "2.0.3"
+    rxAndroidVersion ="2.1.1"
+    rxrelay2 ="2.1.0"
+    rxKotlin ="2.3.0"
+
     googlegms = '17.0.0'
 }
 

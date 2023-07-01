@@ -83,4 +83,10 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:$fragmentktx"
     kapt "com.google.dagger:hilt-compiler:$daggerHilt"
 
+    //Rxjava
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava2Version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    implementation "com.jakewharton.rxrelay2:rxrelay:$rxrelay2"
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlin"
+
 }

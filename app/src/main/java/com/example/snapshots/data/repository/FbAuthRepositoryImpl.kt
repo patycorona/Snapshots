@@ -1,6 +1,5 @@
 package com.example.snapshots.data.repository
 
-import com.example.snapshots.data.network.CoreAuth
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 

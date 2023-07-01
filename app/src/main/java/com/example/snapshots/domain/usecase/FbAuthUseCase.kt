@@ -1,6 +1,5 @@
 package com.example.snapshots.domain.usecase
 
-import com.example.snapshots.data.repository.FbAuthRepository
 import com.example.snapshots.data.repository.FbAuthRepositoryImpl
 import javax.inject.Inject
 

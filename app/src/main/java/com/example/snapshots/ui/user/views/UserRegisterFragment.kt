@@ -47,20 +47,15 @@ class UserRegisterFragment : Fragment() {
              btnRegistar?.setOnClickListener { validaCampos(edUserName.text.toString()
                  ,edPwd.text.toString(),edConfirmPwd.text.toString())}
          }
-
      }
 
     private fun validaCampos(user:String, pwd:String, confirmPwd:String){
         if (user.isNullOrEmpty().not() && pwd.isNullOrEmpty().not() &&
             confirmPwd.isNullOrEmpty().not()){
 
-            if (pwd == confirmPwd) {
-                registerUser(user,pwd)
-            }else{
-                Toast.makeText(requireContext(), MSG_NOT_MATCH_PWD,
+            if (pwd == confirmPwd) registerUser(user,pwd)
+            else Toast.makeText(requireContext(), MSG_NOT_MATCH_PWD,
                     Toast.LENGTH_SHORT).show()
-            }
-
         }else{
             Toast.makeText(requireContext(), MSG_COMPLETE_INFO,
                 Toast.LENGTH_SHORT).show()
@@ -69,7 +64,7 @@ class UserRegisterFragment : Fragment() {
 
     private fun registerUser(email : String, password: String) {
 
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+       // FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
 
         FirebaseAuthViewModel().firebaseAuth(email, password)
             .addOnCompleteListener(requireActivity()) { task ->
@@ -96,7 +91,6 @@ class UserRegisterFragment : Fragment() {
             val uid = it.uid
         }
     }
-
 
     companion object {
         @JvmStatic

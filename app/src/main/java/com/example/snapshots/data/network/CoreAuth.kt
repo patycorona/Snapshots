@@ -5,11 +5,13 @@ import com.google.firebase.auth.FirebaseAuth
 interface CoreAuth {
 
 
-    /*var firebaseAuth: FirebaseAuth? = null
-
-    fun login(){
-        firebaseAuth = FirebaseAuth.getInstance()
-    }*/
+//    fun firebaseAuth(email : String, password: String) =
+//        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+//    /*var firebaseAuth: FirebaseAuth? = null
+//
+//    fun login(){
+//        firebaseAuth = FirebaseAuth.getInstance()
+//    }*/
 
 
 }
