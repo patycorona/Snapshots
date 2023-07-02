@@ -23,6 +23,9 @@ import com.google.firebase.auth.FirebaseUser
 class UserRegisterFragment : Fragment() {
 
     var binding: FragmentUserRegisterBinding? = null
+
+    // TODO: Aqui debes de usar la variable de UserModel como siempre y debe ser algo asi:  private val userViewModel: UserViewModel by viewModels()
+    //
 //    var userModel: UserModel? = UserModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,15 +42,17 @@ class UserRegisterFragment : Fragment() {
         binding = FragmentUserRegisterBinding.inflate(
             LayoutInflater.from(context),null, false)
         initListener()
+
+        //TODO:  Te falta meter los observadores del liveData del viewModel para pbtener la respuesta
         return binding?.root
     }
 
     private fun initListener(){
-         binding?.apply {
-             btnRegistar?.setOnClickListener { validaCampos(edUserName.text.toString()
-                 ,edPwd.text.toString(),edConfirmPwd.text.toString())}
-         }
-     }
+        binding?.apply {
+            btnRegistar?.setOnClickListener { validaCampos(edUserName.text.toString()
+                ,edPwd.text.toString(),edConfirmPwd.text.toString())}
+        }
+    }
 
     private fun validaCampos(user:String, pwd:String, confirmPwd:String){
         if (user.isNullOrEmpty().not() && pwd.isNullOrEmpty().not() &&
@@ -55,7 +60,7 @@ class UserRegisterFragment : Fragment() {
 
             if (pwd == confirmPwd) registerUser(user,pwd)
             else Toast.makeText(requireContext(), MSG_NOT_MATCH_PWD,
-                    Toast.LENGTH_SHORT).show()
+                Toast.LENGTH_SHORT).show()
         }else{
             Toast.makeText(requireContext(), MSG_COMPLETE_INFO,
                 Toast.LENGTH_SHORT).show()
@@ -64,8 +69,9 @@ class UserRegisterFragment : Fragment() {
 
     private fun registerUser(email : String, password: String) {
 
-       // FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+        // FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
 
+        // TODO:  Aqui debes de llamar al metodo del viewModel correspondiente- Asegurate de meter los observadores del liveData
         FirebaseAuthViewModel().firebaseAuth(email, password)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {

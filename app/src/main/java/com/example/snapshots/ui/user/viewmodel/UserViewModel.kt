@@ -9,8 +9,9 @@ import com.example.snapshots.domain.model.ResultModel
 import com.example.snapshots.domain.usecase.UserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
+import io.reactivex.schedulers.Schedulers
 
 @HiltViewModel
 class UserViewModel @Inject constructor(

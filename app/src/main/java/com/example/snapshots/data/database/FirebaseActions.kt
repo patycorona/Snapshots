@@ -5,7 +5,7 @@ import com.example.snapshots.domain.model.ConstantGeneral.Companion.PROPERTY_LIK
 import com.example.snapshots.domain.model.ResultModel
 import com.example.snapshots.ui.login.viewmodel.FirebaseAuthViewModel
 import com.google.firebase.auth.FirebaseAuth
-import io.reactivex.rxjava3.core.Single
+import io.reactivex.Single
 
 class FirebaseActions {
 

@@ -3,7 +3,7 @@ package com.example.snapshots.data.repository
 import com.example.snapshots.data.database.FirebaseActions
 import com.example.snapshots.data.model.request.UserRequest
 import com.example.snapshots.domain.model.ResultModel
-import io.reactivex.rxjava3.core.Single
+import io.reactivex.Single
 import javax.inject.Inject
 
 class UserRepositoyImpl @Inject constructor(

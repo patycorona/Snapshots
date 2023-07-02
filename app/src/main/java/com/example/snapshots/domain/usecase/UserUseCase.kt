@@ -3,7 +3,7 @@ package com.example.snapshots.domain.usecase
 import com.example.snapshots.data.model.request.UserRequest
 import com.example.snapshots.data.repository.UserRepository
 import com.example.snapshots.domain.model.ResultModel
-import io.reactivex.rxjava3.core.Single
+import io.reactivex.Single
 import javax.inject.Inject
 
 class UserUseCase @Inject constructor(var userRepository: UserRepository){
