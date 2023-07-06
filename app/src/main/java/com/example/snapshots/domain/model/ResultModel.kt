@@ -8,5 +8,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class ResultModel(
     var code: String = "",
-    var message: String = ""
+    var message: String = "",
+    val isSuccess:Boolean = false
 ):Parcelable

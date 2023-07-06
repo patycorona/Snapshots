@@ -6,6 +6,7 @@ import com.example.snapshots.R
 import com.example.snapshots.data.model.request.UserRequest
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.ERROR
 import com.example.snapshots.domain.model.ResultModel
+import com.example.snapshots.domain.model.UserModel
 import com.example.snapshots.domain.usecase.UserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -24,9 +25,10 @@ class UserViewModel @Inject constructor(
         MutableLiveData<ResultModel>()
     }
 
-    fun userRegisterFirebase(userRequest: UserRequest){
+    fun userRegisterFirebase(userModel: UserModel){
+        val userModel = UserRequest(email = userModel.email, pwd = userModel.pwd)
 
-        compositeDisposable += userUseCase.userRegisterFirebase(userRequest)
+        compositeDisposable += userUseCase.userRegisterFirebase(userModel)
             .subscribeOn(Schedulers.io())
             .subscribe({ userRegister ->
                 userResultModel.postValue(userRegister)

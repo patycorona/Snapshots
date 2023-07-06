@@ -1,32 +1,34 @@
 package com.example.snapshots.ui.user.views
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.snapshots.R
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.snapshots.databinding.FragmentUserRegisterBinding
+import com.example.snapshots.domain.model.ConstantGeneral.Companion.CODE
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_COMPLETE_INFO
-import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_ERROR_AUTH
+import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_ERROR
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_NOT_MATCH_PWD
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_SUCCESS
+import com.example.snapshots.domain.model.ResultModel
 import com.example.snapshots.domain.model.UserModel
 import com.example.snapshots.ui.MainActivity
 import com.example.snapshots.ui.component.Screen
-import com.example.snapshots.ui.login.viewmodel.FirebaseAuthViewModel
+import com.example.snapshots.ui.user.viewmodel.UserViewModel
 import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class UserRegisterFragment : Fragment() {
 
     var binding: FragmentUserRegisterBinding? = null
+    private val userViewModel: UserViewModel by viewModels()
 
-    // TODO: Aqui debes de usar la variable de UserModel como siempre y debe ser algo asi:  private val userViewModel: UserViewModel by viewModels()
-    //
-//    var userModel: UserModel? = UserModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +43,31 @@ class UserRegisterFragment : Fragment() {
 
         binding = FragmentUserRegisterBinding.inflate(
             LayoutInflater.from(context),null, false)
+        initObserver()
         initListener()
 
-        //TODO:  Te falta meter los observadores del liveData del viewModel para pbtener la respuesta
         return binding?.root
     }
 
+    private var ResultObserver  = Observer<ResultModel> { resultModel ->
+        if (resultModel.code == CODE) {
+            Toast.makeText(
+                requireContext(), MSG_SUCCESS,
+                Toast.LENGTH_SHORT
+            ).show()
+            (activity as MainActivity)
+                .changeScreen(Screen.LoginFragment)
+        } else {
+            Toast.makeText(
+                requireContext(), MSG_ERROR,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun initObserver(){
+        userViewModel.userResultModel.observe(viewLifecycleOwner, ResultObserver)
+    }
     private fun initListener(){
         binding?.apply {
             btnRegistar?.setOnClickListener { validaCampos(edUserName.text.toString()
@@ -58,44 +79,25 @@ class UserRegisterFragment : Fragment() {
         if (user.isNullOrEmpty().not() && pwd.isNullOrEmpty().not() &&
             confirmPwd.isNullOrEmpty().not()){
 
-            if (pwd == confirmPwd) registerUser(user,pwd)
+            var userModel = UserModel(email = user, pwd = pwd )
+
+            if (pwd == confirmPwd) registerUser(userModel)
             else Toast.makeText(requireContext(), MSG_NOT_MATCH_PWD,
                 Toast.LENGTH_SHORT).show()
+
         }else{
             Toast.makeText(requireContext(), MSG_COMPLETE_INFO,
                 Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun registerUser(email : String, password: String) {
-
-        // FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-
-        // TODO:  Aqui debes de llamar al metodo del viewModel correspondiente- Asegurate de meter los observadores del liveData
-        FirebaseAuthViewModel().firebaseAuth(email, password)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(requireContext(), MSG_SUCCESS,
-                        Toast.LENGTH_SHORT).show()
-                    val user = task.result.user
-                    updateUI(user)
-                } else {
-                    Toast.makeText(requireContext(), MSG_ERROR_AUTH,
-                        Toast.LENGTH_SHORT).show()
-                    updateUI(null)
-                }
-            }
+    private fun registerUser(userModel: UserModel) {
+        userViewModel.userRegisterFirebase(userModel)
     }
 
-    fun updateUI(user: FirebaseUser?) {
-        user?.let {
-            val name = it.displayName
-            val email = it.email
-            val photoUrl = it.photoUrl
-
-            val emailVerified = it.isEmailVerified
-            val uid = it.uid
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 
     companion object {

@@ -41,7 +41,7 @@
             android:textColor="@color/purple_200"
             android:textSize="@dimen/text_size_16sp"
             android:minLines="@integer/min_lines"
-            android:text="Admin@patytdch.com"
+            android:text="dulce.chdz@admin.com"
             android:inputType="textEmailAddress"
             android:textColorLink="@color/purple_200"
             android:background="@color/white"
