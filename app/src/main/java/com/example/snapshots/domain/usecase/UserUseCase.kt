@@ -11,5 +11,4 @@ class UserUseCase @Inject constructor(var userRepository: UserRepository){
 
     fun userRegisterFirebase(userRequest: UserRequest): Single<ResultModel> =
         userRepository.userRegisterFirebase(userRequest)
-
 }

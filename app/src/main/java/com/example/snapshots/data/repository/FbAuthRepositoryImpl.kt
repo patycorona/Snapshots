@@ -1,10 +1,19 @@
 package com.example.snapshots.data.repository
 
+import com.example.snapshots.data.database.FirebaseActions
+import com.example.snapshots.data.model.mapping.toModel
+import com.example.snapshots.data.model.request.UserRequest
+import com.example.snapshots.domain.model.ResultModel
 import com.google.firebase.auth.FirebaseAuth
+import io.reactivex.Single
 import javax.inject.Inject
 
 class FbAuthRepositoryImpl @Inject constructor(
-   // var coreAuth: CoreAuth
+    var firebaseActions: FirebaseActions
 ):FbAuthRepository {
-    fun firebaseAuth(email : String, password: String) =  FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+    override fun loginFireBase (userRequest: UserRequest): Single<ResultModel> =
+        firebaseActions.loginFireBase(userRequest)
+            .map { userResponse ->
+                userResponse.toModel()
+            }
 }

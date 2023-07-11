@@ -2,22 +2,15 @@ package com.example.snapshots.ui
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.snapshots.R
 import com.example.snapshots.databinding.ActivityMainBinding
 import com.example.snapshots.ui.Home.views.HomeFragment
 import com.example.snapshots.ui.component.Screen
 import com.example.snapshots.ui.login.views.LoginFragment
-import com.example.snapshots.ui.profile.views.ProfileFragment
 import com.example.snapshots.ui.user.views.UserRegisterFragment
-import com.firebase.ui.auth.IdpResponse
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -53,6 +46,10 @@ class MainActivity : AppCompatActivity(){
                 binding.bottomNav.visibility = View.INVISIBLE
                 openUserRegisterFragment()
             }
+            Screen.HomeFragment ->{
+                binding.bottomNav.visibility= View.INVISIBLE
+                openHomeFragment()
+            }
         }
     }
 
@@ -62,6 +59,10 @@ class MainActivity : AppCompatActivity(){
 
     private fun openUserRegisterFragment() {
         changeFragment(UserRegisterFragment.newInstance())
+    }
+
+    private fun openHomeFragment(){
+        changeFragment(HomeFragment.newInstance())
     }
 
 }

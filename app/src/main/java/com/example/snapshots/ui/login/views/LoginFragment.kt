@@ -6,19 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.snapshots.databinding.FragmentLoginBinding
+import com.example.snapshots.domain.model.ConstantGeneral
+import com.example.snapshots.domain.model.ResultModel
+import com.example.snapshots.domain.model.UserModel
 import com.example.snapshots.ui.MainActivity
 import com.example.snapshots.ui.component.Screen
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.example.snapshots.ui.login.viewmodel.FirebaseAuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     var binding: FragmentLoginBinding? = null
-    lateinit var auth: FirebaseAuth
-   // private val fbAuthViewModel: FirebaseAuthViewModel by viewModels()
+    private val firebaseAuthViewModel: FirebaseAuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,16 +32,14 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        auth = FirebaseAuth.getInstance()
-
         binding = FragmentLoginBinding.inflate(LayoutInflater.from(context),null,false)
 
+        initObserver()
         initListener()
         return binding?.root
     }
 
-    private fun initListener()
-    {
+    private fun initListener() {
 
         binding?.apply {
 
@@ -47,48 +48,45 @@ class LoginFragment : Fragment() {
                     .changeScreen(Screen.UserRegisterFragment)
             }
 
-            btnEntrar.setOnClickListener { authUser(edUserName.text.toString(),edPwd.text.toString()) }
-
-        }
-    }
-
-    fun authUser(email : String, password: String) {
-
-       // fbAuthViewModel.firebaseAuth(email,password)
-
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(requireActivity()){ task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Toast.makeText(requireContext(), "signInWithEmail:success",
-                        Toast.LENGTH_SHORT).show()
-                    val user = task.result.user
-                    updateUI(user)
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Toast.makeText(requireContext(), "Authentication failed.",
-                        Toast.LENGTH_SHORT).show()
-                    updateUI(null)
-                }
+            btnEntrar.setOnClickListener {
+                validaCampos(
+                    edUserName.text.toString(),
+                    edPwd.text.toString()
+                )
             }
-
+        }
     }
 
-    fun updateUI(user: FirebaseUser?) {
-        user?.let {
-            // Name, email address, and profile photo Url
-            val name = it.displayName
-            val email = it.email
-            val photoUrl = it.photoUrl
-
-            // Check if user's email is verified
-            val emailVerified = it.isEmailVerified
-
-            // The user's ID, unique to the Firebase project. Do NOT use this value to
-            // authenticate with your backend server, if you have one. Use
-            // FirebaseUser.getIdToken() instead.
-            val uid = it.uid
+    private var ResultObserver  = Observer<ResultModel> { resultModel ->
+        if (resultModel.code == ConstantGeneral.CODE) {
+            Toast.makeText(
+                requireContext(), ConstantGeneral.MSG_LOGIN_SUCCESS,
+                Toast.LENGTH_SHORT
+            ).show()
+            (activity as MainActivity)
+                .changeScreen(Screen.HomeFragment)
+        } else {
+            Toast.makeText(
+                requireContext(), ConstantGeneral.MSG_ERROR,
+                Toast.LENGTH_SHORT
+            ).show()
         }
+    }
+
+    private fun initObserver(){
+        firebaseAuthViewModel.userResultModel.observe(viewLifecycleOwner, ResultObserver)
+    }
+
+    fun validaCampos(user:String, pwd:String){
+         if (user.isNullOrEmpty().not() && pwd.isNullOrEmpty().not()){
+             var userModel = UserModel(email = user, pwd = pwd )
+             loginFireBase(userModel)
+
+         }
+     }
+
+    fun loginFireBase(userModel: UserModel) {
+        firebaseAuthViewModel.loginFireBase(userModel)
     }
 
     companion object {

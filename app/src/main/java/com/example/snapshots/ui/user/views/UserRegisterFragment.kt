@@ -13,7 +13,7 @@ import com.example.snapshots.domain.model.ConstantGeneral.Companion.CODE
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_COMPLETE_INFO
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_ERROR
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_NOT_MATCH_PWD
-import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_SUCCESS
+import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_REGISTER_SUCCESS
 import com.example.snapshots.domain.model.ResultModel
 import com.example.snapshots.domain.model.UserModel
 import com.example.snapshots.ui.MainActivity
@@ -52,7 +52,7 @@ class UserRegisterFragment : Fragment() {
     private var ResultObserver  = Observer<ResultModel> { resultModel ->
         if (resultModel.code == CODE) {
             Toast.makeText(
-                requireContext(), MSG_SUCCESS,
+                requireContext(), MSG_REGISTER_SUCCESS,
                 Toast.LENGTH_SHORT
             ).show()
             (activity as MainActivity)
@@ -68,6 +68,7 @@ class UserRegisterFragment : Fragment() {
     private fun initObserver(){
         userViewModel.userResultModel.observe(viewLifecycleOwner, ResultObserver)
     }
+
     private fun initListener(){
         binding?.apply {
             btnRegistar?.setOnClickListener { validaCampos(edUserName.text.toString()
