@@ -4,14 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.profile.views.ProfileFragment">
-
+    tools:context=".ui.add.views.AddFragment">
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/profile_title"
-        android:textAppearance="@font/roboto_bold_italic"
+        android:text="@string/add_title"
         android:textSize="@dimen/text_size_50sp"
         android:layout_marginTop="@dimen/space_20dp"
         android:textColor="@color/purple_200"

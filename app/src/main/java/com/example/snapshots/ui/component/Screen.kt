@@ -4,5 +4,7 @@ enum class Screen(val type:String) {
     MainActivity("MainActivity"),
     LoginFragment("LoginFragment"),
     UserRegisterFragment("UserRegisterFragment"),
-    HomeFragment("HomeFragment")
+    HomeFragment("HomeFragment"),
+    ProfileFragment("ProfileFragment"),
+    AddFragment("AddFragment")
 }

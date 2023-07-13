@@ -9,7 +9,7 @@ import com.example.snapshots.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
-    lateinit var binding:FragmentHomeBinding
+    var binding:FragmentHomeBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +21,7 @@ class HomeFragment : Fragment() {
     ): View? {
 
         binding = FragmentHomeBinding.inflate(LayoutInflater.from(context),null, false)
-        return binding.root
+        return binding?.root
     }
 
     companion object {

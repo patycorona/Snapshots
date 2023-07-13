@@ -1,4 +1,4 @@
-package com.example.snapshots.ui.profile.views
+package com.example.snapshots.ui.add.views
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,13 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.snapshots.R
-import com.example.snapshots.databinding.FragmentProfileBinding
+import com.example.snapshots.databinding.FragmentAddBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProfileFragment : Fragment() {
+class AddFragment : Fragment() {
 
-    var binding : FragmentProfileBinding? = null
+    var binding: FragmentAddBinding? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -21,7 +22,8 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentProfileBinding.inflate(LayoutInflater.from(context),null,false)
+
+        binding = FragmentAddBinding.inflate(LayoutInflater.from(context),null,false)
         return binding?.root
     }
 
@@ -29,7 +31,7 @@ class ProfileFragment : Fragment() {
 
         @JvmStatic
         fun newInstance() =
-            ProfileFragment().apply {
+            AddFragment().apply {
                 arguments = Bundle().apply {
                 }
             }
