@@ -15,4 +15,6 @@
     <string name="txt_user_register">Registro de Usuario</string>
     <string name="hint_confirm_pwd">Confirmar password</string>
     <string name="msg_error">An error ocurred</string>
+    <string name="home_add">Add</string>
+    <string name="home_profile">Profile</string>
 </resources>
