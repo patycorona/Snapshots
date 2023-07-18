@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.snapshots.R
 import com.example.snapshots.databinding.ActivityMainBinding
-import com.example.snapshots.ui.Home.views.HomeFragment
+import com.example.snapshots.ui.home.views.HomeFragment
 import com.example.snapshots.ui.add.views.AddFragment
 import com.example.snapshots.ui.component.Screen
 import com.example.snapshots.ui.login.views.LoginFragment
