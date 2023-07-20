@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,8 @@ import com.example.snapshots.databinding.FragmentHomeBinding
 import com.example.snapshots.databinding.FragmentItemSnapshotBinding
 import com.example.snapshots.data.model.response.SnapshotResponse
 import com.example.snapshots.domain.model.ConstantGeneral
+import com.example.snapshots.ui.MainActivity
+import com.example.snapshots.ui.component.Screen
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.DatabaseError
@@ -31,6 +34,10 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            (activity as MainActivity)
+                .changeScreen(Screen.LoginFragment)
+        }
     }
 
     override fun onCreateView(
@@ -88,6 +95,7 @@ class HomeFragment : Fragment() {
             override fun onDataChanged() {
                 super.onDataChanged()
                 binding?.progressBar?.visibility = View.GONE
+                notifyDataSetChanged()
             }
 
              override fun onError(error: DatabaseError) {

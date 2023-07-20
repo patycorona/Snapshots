@@ -15,6 +15,9 @@ class ConstantGeneral {
         const val MSG_NOT_MATCH_PWD = "password and confirm password does not match"
         const val PATH_SNAPSHOTS = "snapshots"
         const val PROPERTY_LIKE_LIST = "likeList"
+        const val RC_GALLERY = 18
+        const val MSG_PHOTO_SUCCESS = "Instantanea publicada"
+        const val MSG_PHOTO_ERROR = "No se pudo subir , intente más tarde"
 
         lateinit var currentUser: FirebaseUser
     }

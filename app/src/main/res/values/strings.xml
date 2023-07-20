@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Snapshots</string>
     <string name="home_title">Home</string>
-    <string name="add_title">Add</string>
+    <string name="add_title">Seleccione una imagen</string>
     <string name="profile_title">Profile</string>
     <string name="txt_welcome">Welcome...</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -17,4 +17,8 @@
     <string name="msg_error">An error ocurred</string>
     <string name="home_add">Add</string>
     <string name="home_profile">Profile</string>
+    <string name="lbl_publicar">Publicar</string>
+    <string name="hint_msg_Instantanea">Titulo de la instantanea</string>
+    <string name="post_message_valid_title">Por favor añada un título</string>
+    <string name="nameFolder">MyPhoto</string>
 </resources>
