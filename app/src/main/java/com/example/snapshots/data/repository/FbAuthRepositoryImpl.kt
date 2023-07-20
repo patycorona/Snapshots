@@ -4,7 +4,6 @@ import com.example.snapshots.data.database.FirebaseActions
 import com.example.snapshots.data.model.mapping.toModel
 import com.example.snapshots.data.model.request.UserRequest
 import com.example.snapshots.domain.model.ResultModel
-import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Single
 import javax.inject.Inject
 

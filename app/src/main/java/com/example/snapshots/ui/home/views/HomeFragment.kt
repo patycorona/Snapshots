@@ -13,8 +13,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.snapshots.R
 import com.example.snapshots.databinding.FragmentHomeBinding
 import com.example.snapshots.databinding.FragmentItemSnapshotBinding
+import com.example.snapshots.data.model.response.SnapshotResponse
 import com.example.snapshots.domain.model.ConstantGeneral
-import com.example.snapshots.domain.model.Snapshot
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.DatabaseError
@@ -26,8 +26,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     var binding:FragmentHomeBinding? = null
-    lateinit var firebaseAdapter: FirebaseRecyclerAdapter<Snapshot, SnapshotHolder>
-    lateinit var layoutManager: RecyclerView.LayoutManager
+    lateinit var firebaseAdapter: FirebaseRecyclerAdapter<SnapshotResponse, SnapshotHolder>
+    lateinit var mlayoutManager: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +44,7 @@ class HomeFragment : Fragment() {
 
     inner class SnapshotHolder(view:View): RecyclerView.ViewHolder(view){
        val mbinding = FragmentItemSnapshotBinding.bind(view)
-        fun setListener(snapshot: Snapshot){
+        fun setListener(snapshot: SnapshotResponse){
 
        }
    }
@@ -52,12 +52,13 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val query = FirebaseDatabase.getInstance().reference.child(ConstantGeneral.PATH_SNAPSHOTS)
-        val options = FirebaseRecyclerOptions.Builder<Snapshot>()
-            .setQuery(query, Snapshot::class.java).build()
+        val query = FirebaseDatabase.getInstance().reference
+            .child(ConstantGeneral.PATH_SNAPSHOTS)
+        val options = FirebaseRecyclerOptions.Builder<SnapshotResponse>()
+            .setQuery(query, SnapshotResponse::class.java).build()
 
 
-        firebaseAdapter = object : FirebaseRecyclerAdapter<Snapshot, SnapshotHolder>(options) {
+        firebaseAdapter = object : FirebaseRecyclerAdapter<SnapshotResponse, SnapshotHolder>(options) {
             private lateinit var mContext: android.content.Context
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SnapshotHolder {
                 mContext = parent.context
@@ -67,7 +68,7 @@ class HomeFragment : Fragment() {
                 return SnapshotHolder(view)
             }
 
-            override fun onBindViewHolder(holder: SnapshotHolder, position: Int, model: Snapshot) {
+            override fun onBindViewHolder(holder: SnapshotHolder, position: Int, model: SnapshotResponse) {
                 val snapshot = getItem(position)
 
                 with(holder) {
@@ -95,11 +96,12 @@ class HomeFragment : Fragment() {
             }
         }// end adapter
 
-        layoutManager = LinearLayoutManager(context)
+        mlayoutManager = LinearLayoutManager(context)
 
         binding?.recyclerView?.apply {
             setHasFixedSize(true)
-            layoutManager = layoutManager
+            layoutManager = mlayoutManager
+            adapter = firebaseAdapter
         }
     }
 

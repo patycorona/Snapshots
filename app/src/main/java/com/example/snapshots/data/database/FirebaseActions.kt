@@ -3,14 +3,18 @@ package com.example.snapshots.data.database
 import com.example.snapshots.data.model.request.UserRequest
 import com.example.snapshots.data.model.response.UserRegisterResponse
 import com.example.snapshots.data.model.response.UserResponse
+import com.example.snapshots.domain.model.ConstantGeneral
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.CODE
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.ERROR
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_ERROR
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_ERROR_AUTH
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_LOGIN_SUCCESS
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_REGISTER_SUCCESS
+import com.example.snapshots.data.model.response.SnapshotResponse
+import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.FirebaseDatabase
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -61,5 +65,12 @@ class FirebaseActions @Inject constructor() {
             // FirebaseUser.getIdToken() instead.
             val uid = it.uid
         }
+    }
+
+    fun getSnapshotsDb(): Single<FirebaseRecyclerOptions<SnapshotResponse>>  {
+        val query = FirebaseDatabase.getInstance().reference
+            .child(ConstantGeneral.PATH_SNAPSHOTS)
+        return Single.just(FirebaseRecyclerOptions.Builder<SnapshotResponse>()
+            .setQuery(query, SnapshotResponse::class.java).build())
     }
 }

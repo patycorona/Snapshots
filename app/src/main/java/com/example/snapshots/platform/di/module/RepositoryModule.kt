@@ -4,6 +4,7 @@ import com.example.snapshots.data.database.FirebaseActions
 import com.example.snapshots.data.database.FirebaseDatabaseCustom
 import com.example.snapshots.data.repository.FbAuthRepositoryImpl
 import com.example.snapshots.data.repository.FbDbcustomeRepositoryImpl
+import com.example.snapshots.data.repository.SnapshotRepositoryImpl
 import com.example.snapshots.data.repository.UserRepositoyImpl
 import dagger.Module
 import dagger.Provides
@@ -17,9 +18,14 @@ class RepositoryModule {
     @Provides
     fun fbDbCustomRepositoryProvider( firebaseDatabaseCustom: FirebaseDatabaseCustom):
             FbDbcustomeRepositoryImpl = FbDbcustomeRepositoryImpl(firebaseDatabaseCustom)
+    @Provides
     fun userRepositoryProvider(fbActions: FirebaseActions): UserRepositoyImpl = UserRepositoyImpl(fbActions)
 
     @Provides
     fun fbAuthRepositoryProvider(fbActions: FirebaseActions):
             FbAuthRepositoryImpl = FbAuthRepositoryImpl(fbActions)
+
+    @Provides
+    fun snapshotRepositoryProvider(fbActions: FirebaseActions):
+            SnapshotRepositoryImpl = SnapshotRepositoryImpl(fbActions)
 }

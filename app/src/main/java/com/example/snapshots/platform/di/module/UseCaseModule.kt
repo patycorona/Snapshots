@@ -2,9 +2,11 @@ package com.example.snapshots.platform.di.module
 
 import com.example.snapshots.data.repository.FbAuthRepositoryImpl
 import com.example.snapshots.data.repository.FbDbcustomeRepositoryImpl
+import com.example.snapshots.data.repository.SnapshotRepositoryImpl
 import com.example.snapshots.data.repository.UserRepositoyImpl
 import com.example.snapshots.domain.usecase.FbAuthUseCase
 import com.example.snapshots.domain.usecase.FirebaseDatabaseCustomUseCase
+import com.example.snapshots.domain.usecase.SnapshotUseCase
 import com.example.snapshots.domain.usecase.UserUseCase
 import dagger.Module
 import dagger.Provides
@@ -26,4 +28,9 @@ class UseCaseModule {
     @Provides
     fun FbAuthUseCaseProvider(fbAuthRepositoryImpl: FbAuthRepositoryImpl) =
         FbAuthUseCase(fbAuthRepositoryImpl)
+
+    @Provides
+    fun snapshotUseCaseProvider(snapshotRepositoryImpl: SnapshotRepositoryImpl) =
+        SnapshotUseCase(snapshotRepositoryImpl)
+
 }
