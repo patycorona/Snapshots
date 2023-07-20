@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
@@ -12,14 +13,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.snapshots.R
+import com.example.snapshots.data.model.response.SnapshotResponse
 import com.example.snapshots.databinding.FragmentHomeBinding
 import com.example.snapshots.databinding.FragmentItemSnapshotBinding
-import com.example.snapshots.data.model.response.SnapshotResponse
 import com.example.snapshots.domain.model.ConstantGeneral
 import com.example.snapshots.ui.MainActivity
 import com.example.snapshots.ui.component.Screen
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,8 +62,49 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        val snapshotResponseList: ArrayList<SnapshotResponse?> = ArrayList<SnapshotResponse?>()
+
         val query = FirebaseDatabase.getInstance().reference
             .child(ConstantGeneral.PATH_SNAPSHOTS)
+
+
+
+
+/*
+        query.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val snapshotResponse: SnapshotResponse? = snapshot.getValue(SnapshotResponse::class.java)
+                snapshotResponseList.add(snapshotResponse)
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                TODO("Not yet implemented")
+            }*/
+
+            /* override fun onDataChange(snapshot: DataSnapshot) {
+                 snapshotResponseList.clear()
+                 for (postSnapshot in snapshot.children) {
+                     val snapshotResponse: SnapshotResponse? = postSnapshot.getValue(SnapshotResponse::class.java)
+                     snapshotResponseList.add(snapshotResponse)
+
+                     // here you can access to name property like university.name
+                 }*/
+            //}
+
+          /*  override fun onCancelled(databaseError: DatabaseError) {
+                // implements error handler
+            }
+        })*/
+
         val options = FirebaseRecyclerOptions.Builder<SnapshotResponse>()
             .setQuery(query, SnapshotResponse::class.java).build()
 

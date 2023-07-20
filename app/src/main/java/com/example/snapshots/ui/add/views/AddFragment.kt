@@ -104,8 +104,8 @@ class AddFragment : Fragment() {
         }
     }
 
-    private fun saveSnapshot(key :String,title:String,  url:String){
-        val snapshot = SnapshotModel(key, title, url)
+    private fun saveSnapshot(key :String,title:String,  photoUrl:String){
+        val snapshot = SnapshotModel(key, title, photoUrl)
         databasePreference.child(key).setValue(snapshot)
     }
 
