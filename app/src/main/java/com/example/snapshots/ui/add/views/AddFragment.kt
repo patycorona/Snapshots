@@ -5,18 +5,20 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toFile
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.snapshots.R
+import com.example.snapshots.data.model.request.SnapshotRequest
 import com.example.snapshots.databinding.FragmentAddBinding
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_PHOTO_ERROR
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_PHOTO_SUCCESS
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.PATH_SNAPSHOTS
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.RC_GALLERY
 import com.example.snapshots.domain.model.SnapshotModel
+import com.example.snapshots.ui.add.viewmodel.AddSnapshotViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -29,8 +31,10 @@ class AddFragment : Fragment() {
 
     var binding: FragmentAddBinding? = null
     private var photoSelectedUri: Uri? = null
-    private lateinit var storageReference: StorageReference
-    private lateinit var  databasePreference: DatabaseReference
+    private val addSnapshotViewModel: AddSnapshotViewModel by viewModels()
+
+//    private lateinit var storageReference: StorageReference
+//    private lateinit var  databasePreference: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +52,8 @@ class AddFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        storageReference = FirebaseStorage.getInstance().reference
-        databasePreference = FirebaseDatabase.getInstance().reference.child(PATH_SNAPSHOTS)
+//        storageReference = FirebaseStorage.getInstance().reference
+//        databasePreference = FirebaseDatabase.getInstance().reference.child(PATH_SNAPSHOTS)
         initListener()
     }
 
@@ -72,41 +76,50 @@ class AddFragment : Fragment() {
 
     private fun postSnapshot(){
         binding?.progressBar?.visibility = View.VISIBLE
-        val storageReb = storageReference.child(PATH_SNAPSHOTS).child(R.string.nameFolder.toString())
-        val key = databasePreference.push().key!!
+//        val storageReb = storageReference.child(PATH_SNAPSHOTS).child(R.string.nameFolder.toString())
+//        val key = databasePreference.push().key!!
 
         if(photoSelectedUri != null){
-            storageReb.putFile(photoSelectedUri!!)
-                .addOnProgressListener {
-                    val progress = (100 * it.bytesTransferred/it.totalByteCount).toInt()
-                    binding?.progressBar?.progress = progress.toInt()
-                    binding?.tvMsg?.text = "$progress %"
-                }
-                .addOnCompleteListener {
-                    binding?.progressBar?.visibility = View.INVISIBLE
-                    binding?.btnSelect?.visibility = View.INVISIBLE
-                }
-                .addOnSuccessListener {
-                    binding?.root?.let { it1 ->
-                        Snackbar.make(it1, MSG_PHOTO_SUCCESS, Snackbar.LENGTH_SHORT).show()
-                        it.storage.downloadUrl.addOnSuccessListener{
-                            saveSnapshot(key, binding?.edTitleInstant?.text.toString().trim(),it.toString())
 
-                            binding?.tiTitleInstant?.visibility = View.GONE
-                            binding?.tvMsg?.text = getString(R.string.post_message_valid_title)
-                        }
-                    }
-                }
-                .addOnFailureListener{
-                    binding?.root?.let { it1 ->
-                        Snackbar.make(it1,MSG_PHOTO_ERROR,Snackbar.LENGTH_SHORT).show() }
-                }
+            saveSnapshot("", binding?.edTitleInstant?.text.toString().trim(),photoSelectedUri.toString())
+//            //porcentaje cuando se esta cargando la imagen
+//            storageReb.putFile(photoSelectedUri!!)
+//                .addOnProgressListener {
+//                    val progress = (100 * it.bytesTransferred/it.totalByteCount).toInt()
+//                    binding?.progressBar?.progress = progress.toInt()
+//                    binding?.tvMsg?.text = "$progress %"
+//                }
+//                .addOnCompleteListener {
+//                    //si esta completo observer
+//                    binding?.progressBar?.visibility = View.INVISIBLE
+//                    binding?.btnSelect?.visibility = View.INVISIBLE
+//                }
+//                .addOnSuccessListener {
+//                    //método para guardar
+//                    binding?.root?.let { it1 ->
+//                        Snackbar.make(it1, MSG_PHOTO_SUCCESS, Snackbar.LENGTH_SHORT).show()
+//                        it.storage.downloadUrl.addOnSuccessListener{
+//                            saveSnapshot(key, binding?.edTitleInstant?.text.toString().trim(),it.toString())
+//
+//                            binding?.tiTitleInstant?.visibility = View.GONE
+//                            binding?.tvMsg?.text = getString(R.string.post_message_valid_title)
+//                        }
+//                    }
+//                }
+//                .addOnFailureListener{
+//                    //mensaje de error
+//                    binding?.root?.let { it1 ->
+//                        Snackbar.make(it1,MSG_PHOTO_ERROR,Snackbar.LENGTH_SHORT).show() }
+//                }
         }
     }
 
     private fun saveSnapshot(key :String,title:String,  photoUrl:String){
-        val snapshot = SnapshotModel(key, title, photoUrl)
-        databasePreference.child(key).setValue(snapshot)
+//        val snapshot = SnapshotModel(key, title, photoUrl)
+//        databasePreference.child(key).setValue(snapshot)
+
+        var snapshotR = SnapshotRequest(key,title,photoUrl)
+        addSnapshotViewModel.addSnapshot(snapshotR)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

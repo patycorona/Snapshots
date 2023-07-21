@@ -16,6 +16,7 @@ class ConstantGeneral {
         const val PATH_SNAPSHOTS = "snapshots"
         const val PROPERTY_LIKE_LIST = "likeList"
         const val RC_GALLERY = 18
+        const val RC_SING_IN = 21
         const val MSG_PHOTO_SUCCESS = "Instantanea publicada"
         const val MSG_PHOTO_ERROR = "No se pudo subir , intente más tarde"
 

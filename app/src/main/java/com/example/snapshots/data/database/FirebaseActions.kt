@@ -1,5 +1,8 @@
 package com.example.snapshots.data.database
 
+import androidx.core.net.toUri
+import com.example.snapshots.R
+import com.example.snapshots.data.model.request.SnapshotRequest
 import com.example.snapshots.data.model.request.UserRequest
 import com.example.snapshots.data.model.response.UserRegisterResponse
 import com.example.snapshots.data.model.response.UserResponse
@@ -10,18 +13,26 @@ import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_ERROR
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_ERROR_AUTH
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_LOGIN_SUCCESS
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_REGISTER_SUCCESS
-import com.example.snapshots.data.model.response.SnapshotResponse
-import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.example.snapshots.domain.model.ConstantGeneral.Companion.PATH_SNAPSHOTS
+import com.example.snapshots.domain.model.ResultModel
+import com.example.snapshots.domain.model.SnapshotModel
+import com.example.snapshots.ui.component.TypeAuth
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import io.reactivex.Single
 import javax.inject.Inject
 
 
 class FirebaseActions @Inject constructor() {
 
-    //FirebaseApp.initializeApp(this)
+    private val firebaseAuth = FirebaseAuth.getInstance()
+    //lateinit var authListener: FirebaseAuth.AuthStateListener
+    private val databaseRefence = FirebaseDatabase.getInstance().reference.child(PATH_SNAPSHOTS)
+    private val storageReference = FirebaseStorage.getInstance().reference
+    private val storageReb = storageReference.child(PATH_SNAPSHOTS).child(R.string.nameFolder.toString())
+
     fun userRegisterFirebase(userRequest: UserRequest) : Single<UserRegisterResponse>{
         var userRegisterResponse = UserRegisterResponse(CODE, MSG_REGISTER_SUCCESS, true)
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(userRequest.email, userRequest.pwd)
@@ -35,18 +46,20 @@ class FirebaseActions @Inject constructor() {
 
     fun loginFireBase(userRequest: UserRequest): Single<UserResponse>{
         var userResponse = UserResponse(CODE, MSG_LOGIN_SUCCESS, true)
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(userRequest.email, userRequest.pwd)
+
+        firebaseAuth.signInWithEmailAndPassword(userRequest.email, userRequest.pwd)
             .addOnCompleteListener() { task ->
-                    if (task.isSuccessful){
-                        userResponse = UserResponse(CODE, MSG_LOGIN_SUCCESS, true)
-                        val user = task.result.user
-                        updateUI(user)
-                    } else{
-                        UserResponse(ERROR, MSG_ERROR_AUTH, false)
-                        val user = task.result.user
-                        updateUI(null)
-                    }
+                if (task.isSuccessful){
+                    userResponse = UserResponse(CODE, MSG_LOGIN_SUCCESS, true)
+                    val user = task.result.user
+                    updateUI(user)
+                } else{
+                    UserResponse(ERROR, MSG_ERROR_AUTH, false)
+                    val user = task.result.user
+                    updateUI(null)
+                }
             }
+
         return Single.just(userResponse)
     }
 
@@ -67,10 +80,22 @@ class FirebaseActions @Inject constructor() {
         }
     }
 
-    fun getSnapshotsDb(): Single<FirebaseRecyclerOptions<SnapshotResponse>>  {
-        val query = FirebaseDatabase.getInstance().reference
-            .child(ConstantGeneral.PATH_SNAPSHOTS)
-        return Single.just(FirebaseRecyclerOptions.Builder<SnapshotResponse>()
-            .setQuery(query, SnapshotResponse::class.java).build())
+    fun addSnapshot(snapshotR : SnapshotRequest):Single<ResultModel>{
+        var result = ResultModel()
+        val key = databaseRefence.push().key!!
+        val photoUri = snapshotR.photoUrl.toUri()
+
+        storageReference.child(ConstantGeneral.PATH_SNAPSHOTS).child(R.string.nameFolder.toString())
+        storageReb.putFile(photoUri!!)
+            .addOnSuccessListener {
+                val snapshot = SnapshotModel(key, snapshotR.title, snapshotR.photoUrl)
+                databaseRefence.child(key).setValue(snapshot)
+                result = ResultModel(CODE, ConstantGeneral.MSG_PHOTO_SUCCESS, true)
+            }
+            .addOnFailureListener{
+                result = ResultModel(ERROR, ConstantGeneral.MSG_PHOTO_ERROR, false)
+            }
+
+        return Single.just(result)
     }
 }
