@@ -7,23 +7,27 @@ import com.example.snapshots.data.model.request.SnapshotRequest
 import com.example.snapshots.data.model.response.SnapshotResponse
 import com.example.snapshots.domain.model.ResultModel
 import com.example.snapshots.domain.model.SnapshotModel
+import io.reactivex.Observable
 import io.reactivex.Single
 import javax.inject.Inject
 
 class SnapshotRepositoryImpl @Inject constructor(
-    var firebaseActions: FirebaseActions
-): SnapshotRepository {
-   
-//    override fun getSnapshotsDb(): Single<MutableList<SnapshotModel>> =
-//        firebaseDatabaseCustom.getSnapshotsDb()
-//        .map{fbRO ->
-//            fbRO.toModel()
-//        }
-   override fun addSnapshot(snapshotR: SnapshotRequest): Single<ResultModel> =
-   firebaseActions.addSnapshot(snapshotR)
-         .map { FBDBC->
-            FBDBC.toModel()
-         }
+    private var firebaseActions: FirebaseActions,
+    private var firebaseDatabaseCustom: FirebaseDatabaseCustom
+) : SnapshotRepository {
+
+    override fun getSnapshotsDb(): Observable<MutableList<SnapshotModel>> =
+        firebaseDatabaseCustom.getSnapshotsDb()
+            .map { list ->
+                list.toModel()
+            }
+
+
+    override fun addSnapshot(snapshotR: SnapshotRequest): Single<ResultModel> =
+        firebaseActions.addSnapshot(snapshotR)
+            .map { FBDBC ->
+                FBDBC.toModel()
+            }
 
 
 }

@@ -1,12 +1,14 @@
 package com.example.snapshots.ui.home.views
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -18,12 +20,21 @@ import com.example.snapshots.databinding.FragmentItemSnapshotBinding
 import com.example.snapshots.domain.model.ConstantGeneral
 import com.example.snapshots.ui.MainActivity
 import com.example.snapshots.ui.component.Screen
+import com.example.snapshots.ui.home.viewmodel.HomeViewModel
+import com.example.snapshots.ui.login.viewmodel.FirebaseAuthViewModel
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
-
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.ValueEventListener
+import io.reactivex.Observable
+import kotlinx.coroutines.flow.callbackFlow
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -31,6 +42,9 @@ class HomeFragment : Fragment() {
     var binding:FragmentHomeBinding? = null
     lateinit var firebaseAdapter: FirebaseRecyclerAdapter<SnapshotResponse, SnapshotHolder>
     lateinit var mlayoutManager: RecyclerView.LayoutManager
+    private lateinit var auth: FirebaseAuth
+
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +52,8 @@ class HomeFragment : Fragment() {
             (activity as MainActivity)
                 .changeScreen(Screen.LoginFragment)
         }
+
+        auth = Firebase.auth
     }
 
     override fun onCreateView(
@@ -59,52 +75,68 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+     //   getSnapshotsDb()
 
-        val snapshotResponseList: ArrayList<SnapshotResponse?> = ArrayList<SnapshotResponse?>()
+         homeViewModel.getSnapshotsDb()
+
+//        buildAdapter()
+
+
+        mlayoutManager = LinearLayoutManager(context)
+
+        binding?.recyclerView?.apply {
+            setHasFixedSize(true)
+            layoutManager = mlayoutManager
+            adapter = firebaseAdapter
+        }
+    }
+
+
+/*
+    fun getSnapshotsDb() {
+        val query = FirebaseDatabase.getInstance().reference
+            .child(ConstantGeneral.PATH_SNAPSHOTS)
+
+
+        val obs: Observable<MutableList<SnapshotResponse>> = Observable.create { emitter ->
+            query.child(ConstantGeneral.PATH_SNAPSHOTS).addValueEventListener(object :
+                ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val list: MutableList<SnapshotResponse> = ArrayList<SnapshotResponse>()
+                    val snapshotIterable = snapshot.children
+                    val iterator: Iterator<DataSnapshot> = snapshotIterable.iterator()
+
+                    while (iterator.hasNext()) {
+                        val snapshotResponse: SnapshotResponse =
+                            iterator.next().getValue(SnapshotResponse::class.java)
+                                ?: SnapshotResponse()
+                        list.add(snapshotResponse)
+                    }
+                    emitter.onNext(list)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    emitter.onError(FirebaseException(error.message))
+                }
+            })
+        }*/
+
+
+//        return obs.flatMap { list -> Observable.just(list) }
+
+//        return Single.just(
+//            FirebaseRecyclerOptions.Builder<SnapshotResponse>()
+//            .setQuery(query, SnapshotResponse::class.java).build())
+    //}
+
+    fun buildAdapter() {
 
         val query = FirebaseDatabase.getInstance().reference
             .child(ConstantGeneral.PATH_SNAPSHOTS)
 
 
-
-
-/*
-        query.addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val snapshotResponse: SnapshotResponse? = snapshot.getValue(SnapshotResponse::class.java)
-                snapshotResponseList.add(snapshotResponse)
-            }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onChildRemoved(snapshot: DataSnapshot) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
-            }*/
-
-            /* override fun onDataChange(snapshot: DataSnapshot) {
-                 snapshotResponseList.clear()
-                 for (postSnapshot in snapshot.children) {
-                     val snapshotResponse: SnapshotResponse? = postSnapshot.getValue(SnapshotResponse::class.java)
-                     snapshotResponseList.add(snapshotResponse)
-
-                     // here you can access to name property like university.name
-                 }*/
-            //}
-
-          /*  override fun onCancelled(databaseError: DatabaseError) {
-                // implements error handler
-            }
-        })*/
-
         val options = FirebaseRecyclerOptions.Builder<SnapshotResponse>()
             .setQuery(query, SnapshotResponse::class.java).build()
-
 
         firebaseAdapter = object : FirebaseRecyclerAdapter<SnapshotResponse, SnapshotHolder>(options) {
             private lateinit var mContext: android.content.Context
@@ -139,23 +171,17 @@ class HomeFragment : Fragment() {
                 notifyDataSetChanged()
             }
 
-             override fun onError(error: DatabaseError) {
+            override fun onError(error: DatabaseError) {
                 super.onError(error)
-                Toast.makeText(mContext, error.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "HOME-" + error.message, Toast.LENGTH_SHORT).show()
             }
         }// end adapter
 
-        mlayoutManager = LinearLayoutManager(context)
-
-        binding?.recyclerView?.apply {
-            setHasFixedSize(true)
-            layoutManager = mlayoutManager
-            adapter = firebaseAdapter
-        }
     }
 
     override fun onStart() {
         super.onStart()
+        val currentUser = auth.currentUser
         firebaseAdapter.startListening()
     }
 

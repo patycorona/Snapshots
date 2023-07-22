@@ -60,7 +60,7 @@ class LoginFragment : Fragment() {
     private var ResultObserver  = Observer<ResultModel> { resultModel ->
         if (resultModel.code == ConstantGeneral.CODE) {
             Toast.makeText(
-                requireContext(), ConstantGeneral.MSG_LOGIN_SUCCESS,
+                requireContext(), "LOGIN - " + ConstantGeneral.MSG_LOGIN_SUCCESS,
                 Toast.LENGTH_SHORT
             ).show()
             (activity as MainActivity)

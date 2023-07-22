@@ -30,6 +30,6 @@ class RepositoryModule {
             FirebaseDatabaseCustom = FirebaseDatabaseCustom()
 
     @Provides
-    fun snapshotRepositoryProvider(fbActions: FirebaseActions):
-            SnapshotRepositoryImpl = SnapshotRepositoryImpl(fbActions)
+    fun snapshotRepositoryProvider(fbActions: FirebaseActions, firebaseDatabaseCustom: FirebaseDatabaseCustom):
+            SnapshotRepositoryImpl = SnapshotRepositoryImpl(fbActions, firebaseDatabaseCustom)
 }
