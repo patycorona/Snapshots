@@ -24,7 +24,6 @@ class AddSnapshotViewModel @Inject constructor (
     }
 
     fun addSnapshot(snapshotR : SnapshotRequest){
-
         compositeDisposable += snapshotUseCase.addSnapshot(snapshotR)
             .subscribeOn(Schedulers.io())
             .subscribe({ userRegister ->

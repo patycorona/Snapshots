@@ -16,7 +16,6 @@ import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_REGISTER
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.PATH_SNAPSHOTS
 import com.example.snapshots.domain.model.ResultModel
 import com.example.snapshots.domain.model.SnapshotModel
-import com.example.snapshots.ui.component.TypeAuth
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
@@ -28,7 +27,6 @@ import javax.inject.Inject
 class FirebaseActions @Inject constructor() {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
-    //lateinit var authListener: FirebaseAuth.AuthStateListener
     private val databaseRefence = FirebaseDatabase.getInstance().reference.child(PATH_SNAPSHOTS)
     private val storageReference = FirebaseStorage.getInstance().reference
     private val storageReb = storageReference.child(PATH_SNAPSHOTS).child(R.string.nameFolder.toString())
@@ -83,6 +81,10 @@ class FirebaseActions @Inject constructor() {
     fun addSnapshot(snapshotR : SnapshotRequest):Single<ResultModel>{
         var result = ResultModel()
         val key = databaseRefence.push().key!!
+
+        val snapshot = SnapshotModel(key, snapshotR.title, snapshotR.photoUrl)
+        databaseRefence.child(key).setValue(snapshot)
+
         val photoUri = snapshotR.photoUrl.toUri()
 
         storageReference.child(ConstantGeneral.PATH_SNAPSHOTS).child(R.string.nameFolder.toString())
@@ -96,6 +98,7 @@ class FirebaseActions @Inject constructor() {
                 result = ResultModel(ERROR, ConstantGeneral.MSG_PHOTO_ERROR, false)
             }
 
+        result = ResultModel(CODE, ConstantGeneral.MSG_PHOTO_SUCCESS, true)
         return Single.just(result)
     }
 }

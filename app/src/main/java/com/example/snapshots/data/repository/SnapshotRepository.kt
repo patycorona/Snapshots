@@ -1,7 +1,6 @@
 package com.example.snapshots.data.repository
 
 import com.example.snapshots.data.model.request.SnapshotRequest
-import com.example.snapshots.data.model.response.SnapshotResponse
 import com.example.snapshots.domain.model.ResultModel
 import io.reactivex.Single
 
