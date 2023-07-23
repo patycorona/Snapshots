@@ -38,4 +38,9 @@ class AddSnapshotViewModel @Inject constructor (
             })
     }
 
+    override fun onCleared() {
+        compositeDisposable.clear()
+        super.onCleared()
+    }
+
 }

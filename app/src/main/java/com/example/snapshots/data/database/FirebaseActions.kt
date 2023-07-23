@@ -29,7 +29,6 @@ class FirebaseActions @Inject constructor() {
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val databaseRefence = FirebaseDatabase.getInstance().reference.child(PATH_SNAPSHOTS)
     private val storageReference = FirebaseStorage.getInstance().reference
-    private val storageReb = storageReference.child(PATH_SNAPSHOTS).child(R.string.nameFolder.toString())
 
     fun userRegisterFirebase(userRequest: UserRequest) : Single<UserRegisterResponse>{
         var userRegisterResponse = UserRegisterResponse(CODE, MSG_REGISTER_SUCCESS, true)
@@ -82,15 +81,17 @@ class FirebaseActions @Inject constructor() {
         var result = ResultModel()
         val key = databaseRefence.push().key!!
 
-        val snapshot = SnapshotModel(key, snapshotR.title, snapshotR.photoUrl)
+       var storageReb = storageReference.child(PATH_SNAPSHOTS)
+           .child(FirebaseAuth.getInstance().currentUser!!.uid).child(key)
+
+        val snapshot = SnapshotModel("", title = snapshotR.title, photoUrl = snapshotR.photoUrl)
         databaseRefence.child(key).setValue(snapshot)
 
         val photoUri = snapshotR.photoUrl.toUri()
 
-        storageReference.child(ConstantGeneral.PATH_SNAPSHOTS).child(R.string.nameFolder.toString())
         storageReb.putFile(photoUri!!)
             .addOnSuccessListener {
-                val snapshot = SnapshotModel(key, snapshotR.title, snapshotR.photoUrl)
+                val snapshot = SnapshotModel("", title = snapshotR.title, photoUrl = snapshotR.photoUrl)
                 databaseRefence.child(key).setValue(snapshot)
                 result = ResultModel(CODE, ConstantGeneral.MSG_PHOTO_SUCCESS, true)
             }

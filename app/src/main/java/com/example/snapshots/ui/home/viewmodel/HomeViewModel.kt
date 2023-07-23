@@ -32,4 +32,9 @@ class HomeViewModel @Inject constructor (
 //            })
     }
 
+//    override fun onCleared() {
+//        compositeDisposable.clear()
+//        super.onCleared()
+//    }
+
 }

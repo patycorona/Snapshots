@@ -21,4 +21,6 @@
     <string name="hint_msg_Instantanea">Titulo de la instantanea</string>
     <string name="post_message_valid_title">Por favor añada un título</string>
     <string name="nameFolder">MyPhoto</string>
+    <string name="lbl_logout">Cerrar sesion</string>
+    <string name="name_user">Nombre completo:</string>
 </resources>
