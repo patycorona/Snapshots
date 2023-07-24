@@ -24,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment : Fragment(), HomeAux {
 
-    var binding:FragmentHomeBinding? = null
+    var binding: FragmentHomeBinding? = null
 
     private val homeViewModel: HomeViewModel by viewModels()
 
@@ -43,16 +43,19 @@ class HomeFragment : Fragment(), HomeAux {
         }
     }
 
-    private var onItemClickListener:((snapshotModel:SnapshotModel,type:String) -> Unit) = { snapshot, type ->
-        val idSnapshot = snapshot.id
+    private var onItemClickListener: ((snapshotModel: SnapshotModel, type: String) -> Unit) =
+        { snapshot, type ->
+            val idSnapshot = snapshot.id
 
-        Toast.makeText(requireContext(), snapshot.title.uppercase(),
-            Toast.LENGTH_SHORT).show()
-        if (type == DELETE){
-            Toast.makeText(requireContext(), idSnapshot, Toast.LENGTH_SHORT).show()
-            deleteSnapshot(idSnapshot)
+            Toast.makeText(
+                requireContext(), snapshot.title.uppercase(),
+                Toast.LENGTH_SHORT
+            ).show()
+            if (type == DELETE) {
+                Toast.makeText(requireContext(), idSnapshot, Toast.LENGTH_SHORT).show()
+                deleteSnapshot(idSnapshot)
+            }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +70,7 @@ class HomeFragment : Fragment(), HomeAux {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentHomeBinding.inflate(LayoutInflater.from(context),null, false)
+        binding = FragmentHomeBinding.inflate(LayoutInflater.from(context), null, false)
 
         initRecycler()
         initObserver()
@@ -76,7 +79,7 @@ class HomeFragment : Fragment(), HomeAux {
     }
 
     override fun goToTop() {
-       binding?.recyclerView?.smoothScrollToPosition(0)
+        binding?.recyclerView?.smoothScrollToPosition(0)
     }
 
     private fun initObserver() {
@@ -87,13 +90,12 @@ class HomeFragment : Fragment(), HomeAux {
         homeViewModel.deleteSnapshot(idSnapshot)
     }
 
-    private fun setList(snapshot: SnapshotResponse, checked: Boolean)
-    {
+    private fun setList(snapshot: SnapshotResponse, checked: Boolean) {
         homeViewModel.setLike(snapshot, checked)
     }
 
     private fun initRecycler() {
-        val linearLayoutManager =  GridLayoutManager(requireContext(), 2)
+        val linearLayoutManager = GridLayoutManager(requireContext(), 2)
         binding?.recyclerView?.apply {
             layoutManager = linearLayoutManager
             isNestedScrollingEnabled = false
