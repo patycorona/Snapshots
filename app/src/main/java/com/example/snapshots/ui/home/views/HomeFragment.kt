@@ -7,30 +7,52 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.example.snapshots.R
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.snapshots.data.model.response.SnapshotResponse
 import com.example.snapshots.databinding.FragmentHomeBinding
-import com.example.snapshots.databinding.FragmentItemSnapshotBinding
-import com.example.snapshots.domain.model.ConstantGeneral
+import com.example.snapshots.domain.model.ConstantGeneral.Companion.DELETE
+import com.example.snapshots.domain.model.ResultSnapshotModel
+import com.example.snapshots.domain.model.SnapshotModel
 import com.example.snapshots.ui.MainActivity
 import com.example.snapshots.ui.component.Screen
-import com.firebase.ui.database.FirebaseRecyclerAdapter
-import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
+import com.example.snapshots.ui.home.viewmodel.HomeViewModel
+import com.example.snapshots.ui.home.views.adapter.SnapshotAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), HomeAux {
 
     var binding:FragmentHomeBinding? = null
-    lateinit var firebaseAdapter: FirebaseRecyclerAdapter<SnapshotResponse, SnapshotHolder>
-    lateinit var mlayoutManager: RecyclerView.LayoutManager
+
+    private val homeViewModel: HomeViewModel by viewModels()
+
+    private val listAllSnapshotsObserver = Observer<ResultSnapshotModel> { allSnapshotsResult ->
+        if (allSnapshotsResult.isSuccess) {
+            allSnapshotsResult.listSnapshotModel.let {
+                val adapter = SnapshotAdapter(
+                    it,
+                    requireContext(),
+                    onItemClickListener
+                )
+                binding?.recyclerView?.adapter = adapter
+                adapter.notifyDataSetChanged()
+                binding?.progressBar?.visibility = View.INVISIBLE
+            }
+        }
+    }
+
+    private var onItemClickListener:((snapshotModel:SnapshotModel,type:String) -> Unit) = { snapshot, type ->
+        val idSnapshot = snapshot.id
+
+        Toast.makeText(requireContext(), snapshot.title.uppercase(),
+            Toast.LENGTH_SHORT).show()
+        if (type == DELETE){
+            Toast.makeText(requireContext(), idSnapshot, Toast.LENGTH_SHORT).show()
+            deleteSnapshot(idSnapshot)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,129 +68,43 @@ class HomeFragment : Fragment() {
     ): View? {
 
         binding = FragmentHomeBinding.inflate(LayoutInflater.from(context),null, false)
+
+        initRecycler()
+        initObserver()
+        homeViewModel.getSnapshotsDb()
         return binding?.root
     }
 
-    inner class SnapshotHolder(view:View): RecyclerView.ViewHolder(view){
-       val mbinding = FragmentItemSnapshotBinding.bind(view)
-        fun setListener(snapshot: SnapshotResponse){
+    override fun goToTop() {
+       binding?.recyclerView?.smoothScrollToPosition(0)
+    }
 
-       }
-   }
+    private fun initObserver() {
+        homeViewModel.list_allSnapshots.observe(viewLifecycleOwner, listAllSnapshotsObserver)
+    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun deleteSnapshot(idSnapshot: String) {
+        homeViewModel.deleteSnapshot(idSnapshot)
+    }
 
+    private fun setList(snapshot: SnapshotResponse, checked: Boolean)
+    {
+        homeViewModel.setLike(snapshot, checked)
+    }
 
-        val snapshotResponseList: ArrayList<SnapshotResponse?> = ArrayList<SnapshotResponse?>()
-
-        val query = FirebaseDatabase.getInstance().reference
-            .child(ConstantGeneral.PATH_SNAPSHOTS)
-
-
-
-
-/*
-        query.addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val snapshotResponse: SnapshotResponse? = snapshot.getValue(SnapshotResponse::class.java)
-                snapshotResponseList.add(snapshotResponse)
-            }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onChildRemoved(snapshot: DataSnapshot) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
-            }*/
-
-            /* override fun onDataChange(snapshot: DataSnapshot) {
-                 snapshotResponseList.clear()
-                 for (postSnapshot in snapshot.children) {
-                     val snapshotResponse: SnapshotResponse? = postSnapshot.getValue(SnapshotResponse::class.java)
-                     snapshotResponseList.add(snapshotResponse)
-
-                     // here you can access to name property like university.name
-                 }*/
-            //}
-
-          /*  override fun onCancelled(databaseError: DatabaseError) {
-                // implements error handler
-            }
-        })*/
-
-        val options = FirebaseRecyclerOptions.Builder<SnapshotResponse>()
-            .setQuery(query, SnapshotResponse::class.java).build()
-
-
-        firebaseAdapter = object : FirebaseRecyclerAdapter<SnapshotResponse, SnapshotHolder>(options) {
-            private lateinit var mContext: android.content.Context
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SnapshotHolder {
-                mContext = parent.context
-
-                val view = LayoutInflater.from(mContext)
-                    .inflate(R.layout.fragment_item_snapshot, parent, false)
-                return SnapshotHolder(view)
-            }
-
-            override fun onBindViewHolder(holder: SnapshotHolder, position: Int, model: SnapshotResponse) {
-                val snapshot = getItem(position)
-
-                with(holder) {
-                    setListener(snapshot)
-
-                    mbinding.apply {
-                        tvtitle?.text = snapshot.title
-                        Glide.with(mContext)
-                            .load(snapshot.photoUrl)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .centerCrop()
-                            .into(imgPhoto)
-                    }
-                }
-            }
-
-            override fun onDataChanged() {
-                super.onDataChanged()
-                binding?.progressBar?.visibility = View.GONE
-                notifyDataSetChanged()
-            }
-
-             override fun onError(error: DatabaseError) {
-                super.onError(error)
-                Toast.makeText(mContext, error.message, Toast.LENGTH_SHORT).show()
-            }
-        }// end adapter
-
-        mlayoutManager = LinearLayoutManager(context)
-
+    private fun initRecycler() {
+        val linearLayoutManager =  GridLayoutManager(requireContext(), 2)
         binding?.recyclerView?.apply {
+            layoutManager = linearLayoutManager
+            isNestedScrollingEnabled = false
             setHasFixedSize(true)
-            layoutManager = mlayoutManager
-            adapter = firebaseAdapter
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        firebaseAdapter.startListening()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        firebaseAdapter.stopListening()
     }
 
     companion object {
         @JvmStatic
         fun newInstance() =
             HomeFragment().apply {
-
             }
     }
 }

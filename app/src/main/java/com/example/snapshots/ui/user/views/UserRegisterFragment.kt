@@ -29,7 +29,6 @@ class UserRegisterFragment : Fragment() {
     var binding: FragmentUserRegisterBinding? = null
     private val userViewModel: UserViewModel by viewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -85,7 +84,6 @@ class UserRegisterFragment : Fragment() {
             if (pwd == confirmPwd) registerUser(userModel)
             else Toast.makeText(requireContext(), MSG_NOT_MATCH_PWD,
                 Toast.LENGTH_SHORT).show()
-
         }else{
             Toast.makeText(requireContext(), MSG_COMPLETE_INFO,
                 Toast.LENGTH_SHORT).show()

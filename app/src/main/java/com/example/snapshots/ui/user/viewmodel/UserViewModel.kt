@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.example.snapshots.R
 import com.example.snapshots.data.model.request.UserRequest
 import com.example.snapshots.domain.model.ConstantGeneral.Companion.ERROR
-import com.example.snapshots.domain.model.ConstantGeneral.Companion.MSG_ERROR
 import com.example.snapshots.domain.model.ResultModel
 import com.example.snapshots.domain.model.UserModel
 import com.example.snapshots.domain.usecase.UserUseCase

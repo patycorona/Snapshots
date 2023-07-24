@@ -1,8 +1,5 @@
 package com.example.snapshots.ui.login.viewmodel
 
-import android.content.Context
-import android.widget.Toast
-import androidx.core.content.contentValuesOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.snapshots.R
@@ -11,9 +8,6 @@ import com.example.snapshots.domain.model.ConstantGeneral
 import com.example.snapshots.domain.model.ResultModel
 import com.example.snapshots.domain.model.UserModel
 import com.example.snapshots.domain.usecase.FbAuthUseCase
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign

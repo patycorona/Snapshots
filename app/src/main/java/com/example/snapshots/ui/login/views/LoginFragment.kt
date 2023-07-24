@@ -60,7 +60,7 @@ class LoginFragment : Fragment() {
     private var ResultObserver  = Observer<ResultModel> { resultModel ->
         if (resultModel.code == ConstantGeneral.CODE) {
             Toast.makeText(
-                requireContext(), ConstantGeneral.MSG_LOGIN_SUCCESS,
+                requireContext(), "LOGIN - " + ConstantGeneral.MSG_LOGIN_SUCCESS,
                 Toast.LENGTH_SHORT
             ).show()
             (activity as MainActivity)
@@ -79,14 +79,18 @@ class LoginFragment : Fragment() {
 
     fun validaCampos(user:String, pwd:String){
          if (user.isNullOrEmpty().not() && pwd.isNullOrEmpty().not()){
-             var userModel = UserModel(email = user, pwd = pwd )
+             val userModel = UserModel(email = user, pwd = pwd )
              loginFireBase(userModel)
-
          }
      }
 
     fun loginFireBase(userModel: UserModel) {
         firebaseAuthViewModel.loginFireBase(userModel)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 
     companion object {

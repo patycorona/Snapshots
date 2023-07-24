@@ -2,10 +2,12 @@ package com.example.snapshots.domain.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 
 @Parcelize
-data class ResultModel(
+data class ResultSnapshotModel(
     var code: String = "",
     var message: String = "",
-    val isSuccess:Boolean = false
+    val isSuccess:Boolean = false,
+    val listSnapshotModel: @RawValue MutableList<SnapshotModel> = mutableListOf()
 ):Parcelable

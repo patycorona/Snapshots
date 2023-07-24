@@ -8,6 +8,15 @@
     android:id="@+id/layout_item">
 
     <TextView
+        android:id="@+id/tv_idSnapshot"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
         android:id="@+id/tvtitle"
         android:layout_width="@dimen/spacing_0dp"
         android:layout_height="wrap_content"

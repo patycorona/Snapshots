@@ -1,8 +1,5 @@
 package com.example.snapshots.data.model.mapping
 
-import com.example.snapshots.data.model.request.SnapshotRequest
-import com.example.snapshots.data.model.request.UserRequest
-import com.example.snapshots.data.model.response.ResultResponse
 import com.example.snapshots.data.model.response.UserRegisterResponse
 import com.example.snapshots.data.model.response.UserResponse
 import com.example.snapshots.domain.model.ResultModel

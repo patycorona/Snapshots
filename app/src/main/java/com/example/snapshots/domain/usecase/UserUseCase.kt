@@ -1,7 +1,6 @@
 package com.example.snapshots.domain.usecase
 
 import com.example.snapshots.data.model.request.UserRequest
-import com.example.snapshots.data.model.response.UserRegisterResponse
 import com.example.snapshots.data.repository.UserRepository
 import com.example.snapshots.domain.model.ResultModel
 import io.reactivex.Single

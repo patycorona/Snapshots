@@ -36,13 +36,21 @@ class MainActivity : AppCompatActivity(){
         ft.commit()
     }
 
-    private fun initListener(){
+    private fun initListener() {
         binding.apply {
             bottomNav.setOnNavigationItemSelectedListener {
-                when(it.itemId){
-                    R.id.action_home -> {changeScreen(Screen.HomeFragment)}
-                    R.id.action_add -> {changeScreen(Screen.AddFragment)}
-                    R.id.action_profile -> {changeScreen(Screen.ProfileFragment)}
+                when (it.itemId) {
+                    R.id.action_home -> {
+                        changeScreen(Screen.HomeFragment)
+                    }
+
+                    R.id.action_add -> {
+                        changeScreen(Screen.AddFragment)
+                    }
+
+                    R.id.action_profile -> {
+                        changeScreen(Screen.ProfileFragment)
+                    }
                 }
                 true
             }

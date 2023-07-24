@@ -27,8 +27,6 @@ import javax.inject.Inject
 class FirebaseActions @Inject constructor() {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
-    private val databaseRefence = FirebaseDatabase.getInstance().reference.child(PATH_SNAPSHOTS)
-    private val storageReference = FirebaseStorage.getInstance().reference
 
     fun userRegisterFirebase(userRequest: UserRequest) : Single<UserRegisterResponse>{
         var userRegisterResponse = UserRegisterResponse(CODE, MSG_REGISTER_SUCCESS, true)
@@ -77,29 +75,4 @@ class FirebaseActions @Inject constructor() {
         }
     }
 
-    fun addSnapshot(snapshotR : SnapshotRequest):Single<ResultModel>{
-        var result = ResultModel()
-        val key = databaseRefence.push().key!!
-
-       var storageReb = storageReference.child(PATH_SNAPSHOTS)
-           .child(FirebaseAuth.getInstance().currentUser!!.uid).child(key)
-
-        val snapshot = SnapshotModel("", title = snapshotR.title, photoUrl = snapshotR.photoUrl)
-        databaseRefence.child(key).setValue(snapshot)
-
-        val photoUri = snapshotR.photoUrl.toUri()
-
-        storageReb.putFile(photoUri!!)
-            .addOnSuccessListener {
-                val snapshot = SnapshotModel("", title = snapshotR.title, photoUrl = snapshotR.photoUrl)
-                databaseRefence.child(key).setValue(snapshot)
-                result = ResultModel(CODE, ConstantGeneral.MSG_PHOTO_SUCCESS, true)
-            }
-            .addOnFailureListener{
-                result = ResultModel(ERROR, ConstantGeneral.MSG_PHOTO_ERROR, false)
-            }
-
-        result = ResultModel(CODE, ConstantGeneral.MSG_PHOTO_SUCCESS, true)
-        return Single.just(result)
-    }
 }

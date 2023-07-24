@@ -30,7 +30,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvName"/>
 
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_logout"
         android:text="@string/lbl_logout"

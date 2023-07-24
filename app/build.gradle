@@ -44,6 +44,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    kapt {
+        correctErrorTypes true
+    }
 }
 
 dependencies {
@@ -53,6 +57,8 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
     implementation "com.google.android.material:material:$materialVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    implementation "androidx.drawerlayout:drawerlayout:$drawerlayout"
+    implementation "androidx.fragment:fragment-ktx:$fragmentktx"
 
     //Room
     implementation "androidx.room:room-runtime:$room"
@@ -70,6 +76,14 @@ dependencies {
     // FirebaseUI for Firebase Auth
     implementation "com.firebaseui:firebase-ui-auth:$firebasedatabase"
 
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:31.4.0"))
+
+    // Add the dependency for the Firebase Authentication library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-auth-ktx")
+
+
     //import the Bom for the firabase platform
     implementation "com.google.firebase:firebase-bom:$firebase"
 
@@ -83,8 +97,6 @@ dependencies {
 
     //dagger hilt
     implementation "com.google.dagger:hilt-android:$daggerHilt"
-    implementation "androidx.drawerlayout:drawerlayout:$drawerlayout"
-    implementation "androidx.fragment:fragment-ktx:$fragmentktx"
     kapt "com.google.dagger:hilt-compiler:$daggerHilt"
 
     //Rxjava

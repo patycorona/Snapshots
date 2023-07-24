@@ -112,6 +112,11 @@ class AddFragment : Fragment() {
         addSnapshotViewModel.snapshotResultModel.observe(viewLifecycleOwner, addSnapshotResultObserver)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
     companion object {
         @JvmStatic
         fun newInstance() =

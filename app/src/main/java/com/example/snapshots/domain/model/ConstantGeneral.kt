@@ -20,6 +20,7 @@ class ConstantGeneral {
         const val MSG_SIGN_OUT = "Hasta pronto.."
         const val MSG_PHOTO_SUCCESS = "Instantanea publicada"
         const val MSG_PHOTO_ERROR = "No se pudo subir , intente más tarde"
+        const val DELETE = "delete"
 
         lateinit var currentUser: FirebaseUser
     }
