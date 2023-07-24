@@ -2,9 +2,9 @@
 buildscript {
 
     ext.toolsVersion = '7.3.1'
-    ext.jetkotlinK = "1.6.10"
+    ext.jetkotlinK = "1.8.0"
     ext.googleServicesVersion = "4.3.13"
-    ext.daggerHilt = "2.40.5"
+    ext.daggerHilt = "2.47"
 
     repositories {
         google()
@@ -43,10 +43,16 @@ ext {
     jUnitExt = '1.1.5'
     expresso = '3.5.1'
 
-    daggerHiltApp = "2.40.5"
+
     daggerHiltViewModelApp = "1.0.0-alpha03"
     drawerlayout = "1.1.1"
     fragmentktx = "1.5.3"
+
+    //RxJava
+    rxjava2Version = "2.0.3"
+    rxAndroidVersion ="2.1.1"
+    rxrelay2 ="2.1.0"
+    rxKotlin ="2.3.0"
 
     googlegms = '17.0.0'
 }
