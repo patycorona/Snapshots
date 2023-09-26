@@ -44,3 +44,10 @@ Se actualiza lista de snapshots <br>
 ![Selection_007](https://github.com/patycorona/Snapshots/assets/65816817/e9fef4e0-f693-434a-9caa-4b94edc652d3)
 
 
+<br>
+Cerrar Sesión <br>
+
+
+https://github.com/patycorona/Snapshots/assets/65816817/2c7460e4-da4d-44d6-be59-b476b7570d0d
+
+
